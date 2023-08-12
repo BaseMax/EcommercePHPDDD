@@ -29,22 +29,65 @@ The architecture of the DDD PHP 8.2 Ecommerce System follows a layered approach,
 
 - PHP 8.2 or higher
 - Composer
+- Mysql
 
 **Installation**
 
 - Clone this repository: `git clone https://github.com/BaseMax/EcommercePHPDDD.git`
 - Go to project directory: `cd EcommercePHPDDD`
 - Install dependencies: `composer install`
+- Setup mysql database tables: you can either use sql code below or use sql backup `database.sql`
+- Edit `.env` file with your own values
+- (optionaly) Seed the database: `cd app/Database/ && php Seeder.php`
+- Run the server: `cd public/ && php -S localhost:8000`
+- App is running on `http://localhost:8000`
 
-## Usage
+## Mysql Tables SQL Code
 
-To start using the DDD PHP 8.2 Ecommerce System, follow these steps:
+** products **
+```sql
+CREATE TABLE IF NOT EXISTS products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    price INT NOT NULL
+);
+```
 
-- Configure your web server to point to the public directory as the document root.
-- Set up your database connection in the `.env` and `config/database.php` file.
-- Define your domain entities, aggregates, and repositories in the Domain layer.
-- Implement application services and use cases in the Application layer.
-- Create Restful API endpoints in the Presentation layer using appropriate controllers and routing.
+** orders **
+```sql
+CREATE TABLE IF NOT EXISTS orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    address TEXT NOT NULL,
+    total_price INT NOT NULL,
+    status VARCHAR(255) NOT NULL
+);
+```
+
+** order_products **
+```sql
+CREATE TABLE IF NOT EXISTS order_products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+);
+```
+
+** payments **
+```sql
+CREATE TABLE IF NOT EXISTS payments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    idpay_id VARCHAR(255) NOT NULL,
+    link VARCHAR(255) NOT NULL,
+    amount INT NOT NULL,
+    status INT NOT NULL,
+    track_id INT NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
+);
+```
 
 ## API Documentation
 

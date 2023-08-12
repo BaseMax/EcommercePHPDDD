@@ -38,6 +38,9 @@ class CartController extends Controller
         } catch(Exception $e){
             Abort::badRequest();
         }
+        if(intval($_POST['quantity']) < 1){
+            Abort::badRequest();
+        }
         $added = false;
         for ($i=0; $i < count($_SESSION['cart']); $i++) { 
             if($_SESSION['cart'][$i]['product'] == intval($_POST['product'])){
