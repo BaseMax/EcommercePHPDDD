@@ -44,7 +44,7 @@ The architecture of the DDD PHP 8.2 Ecommerce System follows a layered approach,
 
 ## Mysql Tables SQL Code
 
-** products **
+**products**
 
 ```sql
 CREATE TABLE IF NOT EXISTS products (
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS products (
 );
 ```
 
-** orders **
+**orders**
 
 ```sql
 CREATE TABLE IF NOT EXISTS orders (
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS orders (
 );
 ```
 
-** order_products **
+**order_products**
 
 ```sql
 CREATE TABLE IF NOT EXISTS order_products (
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS order_products (
 );
 ```
 
-** payments **
+**payments**
 
 ```sql
 CREATE TABLE IF NOT EXISTS payments (
