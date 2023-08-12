@@ -5,7 +5,7 @@
 <h5 class="mt-2" id="totalPrice"></h5>
 <form action="/checkout" method="post">
     <textarea name="address" cols="30" rows="10" class="form-control" placeholder="address" required></textarea>
-    <button type="submit" class="btn btn-primary mt-3">Checkout</button>
+    <button type="submit" class="btn btn-primary mt-3">Pay</button>
 </form>
 <script>
     fetch('/cart')

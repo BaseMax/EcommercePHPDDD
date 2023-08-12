@@ -41,19 +41,17 @@ class CheckoutController extends Controller
             $total_price += $product->price * intval($p['quantity']);
             array_push($products, ['product' => $product, 'quantity' => intval($p['quantity'])]);
         }
-        
-        $order = new Order();
-        $order->id = 1;
-        Response::json($order->products());
-        Response::json($products);
+        $orderId = (new Order())->create([
+            'total_price' => $total_price,
+            'address' => $_POST['address'],
+            'status' => 'pending'
+        ]);
+        $order = (new Order)->where('id', $orderId)->get()[0];
+        $order->setProducts($products);
+        Redirect::to('/payment/pay/'.$orderId);
     }
 
     public function result($status){
-        if($status == "ok"){
-
-        } else if($status == "canceled"){
-
-        }
-        Abort::notFound();
+        Response::view('Checkout/Result', ['status' => $status]);
     }
 }

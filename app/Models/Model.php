@@ -65,7 +65,7 @@ abstract class Model
 
     public function update(){
         $cols = $this->cols;
-        $sql = "UPDATE ".$this->getTableName()." SET";
+        $sql = "UPDATE ".$this->getTableName()." SET ";
         foreach($cols as $col){
             if($col == 'id') continue;
             if(is_string($this->$col)){
@@ -76,7 +76,7 @@ abstract class Model
         }
         $sql = substr($sql, 0, -1);
         $id = 'id';
-        $sql .= "WHERE id = ".$this->$id;
+        $sql .= " WHERE id = ".$this->$id;
         $this->db->execute($sql);
     }
 
@@ -130,7 +130,7 @@ abstract class Model
         return $this;
     }
 
-    public function belogsToMany($model, $table, $mKey, $rKey, $pivot = []){
+    public function getBelogsToMany($model, $table, $mKey, $rKey, $pivot = []){
         $id = 'id';
         $rTable = $this->getCustomTableName(new $model);
         $sql = "SELECT * FROM $rTable INNER JOIN $table ON ".$rTable.".id = ".$table.".".$rKey." where ".$table.".".$mKey." = ".$this->$id;
@@ -155,5 +155,31 @@ abstract class Model
             array_push($rObjects, $object);
         }
         return $rObjects;
+    }
+
+    public function setBelogsToMany($data, $model, $table, $mKey, $rKey, $pivot = []){
+        $id = 'id';
+        $sql = "INSERT INTO $table($mKey, $rKey,";
+        foreach($pivot as $p){
+            $sql .= $p.',';
+        }
+        $sql = substr($sql, 0, -1);
+        $sql .= ") VALUES";
+        $rName = substr($this->getCustomTableName((new $model)), 0, -1);
+        foreach($data as $d){
+            $sql .= "(";
+            $sql .= $this->$id.','.$d[$rName]->$id.',';
+            foreach($pivot as $p){
+                if(is_string($d[$p])){
+                    $sql .= "'".$d[$p]."',";
+                } else {
+                    $sql .= $d[$p].',';
+                }
+            }
+            $sql = substr($sql, 0, -1);
+            $sql .= "),";
+        }
+        $sql = substr($sql, 0, -1);
+        $this->db->execute($sql);
     }
 }

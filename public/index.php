@@ -31,7 +31,7 @@ Router::get('/checkout/review', [CheckoutController::class, 'review']);
 Router::post('/checkout', [CheckoutController::class, 'checkout']);
 Router::get('/checkout/result/:status', [CheckoutController::class, 'result']);
 
-Router::get('/payment/pay', [PaymentController::class, 'pay']);
-Router::get('/payment/callback', [PaymentController::class, 'callback']);
+Router::get('/payment/pay/:orderId', [PaymentController::class, 'pay']);
+Router::post('/payment/callback', [PaymentController::class, 'callback']);
 
 Abort::notFound();
