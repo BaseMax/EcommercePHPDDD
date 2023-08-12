@@ -95,9 +95,13 @@ abstract class Model
         return $this;
     }
 
-    private function getTableName(){
-        $classPath = explode('\\', get_class($this));
+    private function getCustomTableName($modelObject){
+        $classPath = explode('\\', get_class($modelObject));
         return lcfirst($classPath[count($classPath) - 1]).'s';
+    }
+
+    private function getTableName(){
+        return $this->getCustomTableName($this);
     }
 
     public function hasMany($model, $key){
@@ -107,5 +111,49 @@ abstract class Model
 
     public function belogsTo($model, $key){
         return (new $model)->where('id', $this->$key)->get()[0];
+    }
+
+    public function whereIn($col, $vals){
+        if(count($vals) == 0) return;
+        $this->sql .= " WHERE $col IN (";
+        if(is_string($vals[0])){
+            foreach($vals as $val){
+                $this->sql .= "'$val',";
+            }
+        } else {
+            foreach($vals as $val){
+                $this->sql .= "$val,";
+            }
+        }
+        $this->sql = substr($this->sql, 0, -1);
+        $this->sql .= ")";
+        return $this;
+    }
+
+    public function belogsToMany($model, $table, $mKey, $rKey, $pivot = []){
+        $id = 'id';
+        $rTable = $this->getCustomTableName(new $model);
+        $sql = "SELECT * FROM $rTable INNER JOIN $table ON ".$rTable.".id = ".$table.".".$rKey." where ".$table.".".$mKey." = ".$this->$id;
+        $this->db->execute($sql);
+        $result = $this->db->statement->fetchAll();
+        $rObjects = [];
+        $cols = (new $model)->cols;
+        foreach($result as $r){
+            $object = new $model;
+            $object = (array) $object;
+            foreach($cols as $col){
+                if($col == 'id') {
+                    $object[$col] = $r[$rKey];
+                } else {
+                    $object[$col] = $r[$col];
+                }
+            }
+            foreach($pivot as $p){
+                $object[$p] = $r[$p];
+            }
+            $object = (object) $object;
+            array_push($rObjects, $object);
+        }
+        return $rObjects;
     }
 }
