@@ -112,9 +112,9 @@ class MysqlDatabase implements IDatabase
         $this->execute($sql);
     }
 
-    public function delete(){
+    public function delete($objectId){
         $id = 'id';
-        $sql = "DELETE FROM ".$this->getTableName()." WHERE id = ".$this->repository->modelClass->$id;
+        $sql = "DELETE FROM ".$this->getTableName()." WHERE id = ".$objectId;
         $this->execute($sql);
     }
 

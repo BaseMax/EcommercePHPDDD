@@ -35,8 +35,8 @@ abstract class Repository implements IRepository
         $this->db->update($modelObject);
     }
 
-    public function delete(){
-        $this->db->delete();
+    public function delete($objectId){
+        $this->db->delete($objectId);
     }
 
     public function where($col, $val){

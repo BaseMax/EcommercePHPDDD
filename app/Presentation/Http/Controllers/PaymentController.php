@@ -75,10 +75,10 @@ class PaymentController extends Controller
 
     private function cleanUpOnError($payment, $order){
         if($payment != null){
-            $payment->delete();
+            (new PaymentRepository($this->mysqlDatabase))->delete($payment->id);
         }
         if($order != null){
-            $order->delete();
+            (new OrderRepository($this->mysqlDatabase))->delete($payment->id);
         }
         Redirect::to('/checkout/result/canceled');
     }

@@ -23,6 +23,29 @@ The architecture of the DDD PHP 8.2 Ecommerce System follows a layered approach,
 - **Domain Layer:** Contains the core business logic and domain entities. This layer is the heart of the application and should be independent of other layers.
 - **Infrastructure Layer:** Provides implementations for external dependencies such as databases, HTTP clients, and third-party integrations.
 
+## Routes
+
+### Product
+
+- `GET /products`: Show all products.
+- `GET /product/{id}`: Show the product with specified id.
+
+### Cart
+
+- `GET /cart`: Return all products in users cart.
+- `POST /cart/add`: Add a product to users cart.
+
+### Checkout
+
+- `GET /checkout/review`: Show user cart and get user address for placing order.
+- `POST /checkout`: Place a new order and bill user.
+- `GET /checkout/result/{status}`: Show order acceptance status.
+
+### Payment
+
+- `GET /payment/pay/{orderId}`: Pay the bill.
+- `POST /payment/callback`: Verify bill payment.
+
 ## Getting Started
 
 **Prerequisites**

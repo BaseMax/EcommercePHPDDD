@@ -9,7 +9,7 @@ interface IRepository
     public function first();
     public function count();
     public function update($modelObject);
-    public function delete();
+    public function delete($objectId);
     public function where($col, $val);
     public function whereIn($col, $vals);
     public function getHasMany($modelId, $modelRepository, $key);
