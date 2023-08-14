@@ -23,6 +23,12 @@ The architecture of the DDD PHP 8.2 Ecommerce System follows a layered approach,
 - **Domain Layer:** Contains the core business logic and domain entities. This layer is the heart of the application and should be independent of other layers.
 - **Infrastructure Layer:** Provides implementations for external dependencies such as databases, HTTP clients, and third-party integrations.
 
+## ScreenShots
+
+![Alt text](/screenshots/screenshot (1).png?raw=true "screenshot 1")
+![Alt text](/screenshots/screenshot (2).png?raw=true "screenshot 2")
+![Alt text](/screenshots/screenshot (3).png?raw=true "screenshot 3")
+
 ## Routes
 
 ### Product
