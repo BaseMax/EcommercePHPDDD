@@ -25,9 +25,9 @@ The architecture of the DDD PHP 8.2 Ecommerce System follows a layered approach,
 
 ## Screenshots
 
-![screenshot 1](https://raw.github.com/BaseMax/EcommercePHPDDD/main/screenshots/screenshot (1).png)
-![screenshot 2](https://raw.github.com/BaseMax/EcommercePHPDDD/main/screenshots/screenshot (2).png)
-![screenshot 3](https://raw.github.com/BaseMax/EcommercePHPDDD/main/screenshots/screenshot (3).png)
+![screenshot1](https://raw.github.com/BaseMax/EcommercePHPDDD/main/screenshots/screenshot%20(1).png)
+![screenshot2](https://raw.github.com/BaseMax/EcommercePHPDDD/main/screenshots/screenshot%20(2).png)
+![screenshot3](https://raw.github.com/BaseMax/EcommercePHPDDD/main/screenshots/screenshot%20(3).png)
 
 ## Routes
 
