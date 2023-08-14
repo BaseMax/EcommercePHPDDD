@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Presentation\Http\Controllers;
 
-use App\Models\Order;
-use App\Models\Product;
-use App\Response\Abort;
-use App\Response\Response;
-use App\Router\Redirect;
-use App\Validator\Validator;
+use App\Domain\Order\OrderRepository;
+use App\Domain\Product\ProductRepository;
+use App\Presentation\Http\Response\Response;
+use App\Presentation\Http\Response\Abort;
+use App\Presentation\Http\Router\Redirect;
+use App\Application\Validator\Validator;
 use Exception;
 
 class CheckoutController extends Controller
@@ -33,21 +33,19 @@ class CheckoutController extends Controller
         $products = [];
         $total_price = 0;
         foreach($_SESSION['cart'] as $p){
-            $product = (new Product)->where('id', intval($p['product']))->get();
-            if(count($product) == 0){
+            $product = (new ProductRepository($this->mysqlDatabase))->where('id', intval($p['product']))->first();
+            if($product == null){
                 return Abort::serverError();
             }
-            $product = $product[0];
             $total_price += $product->price * intval($p['quantity']);
             array_push($products, ['product' => $product, 'quantity' => intval($p['quantity'])]);
         }
-        $orderId = (new Order())->create([
+        $orderId = (new OrderRepository($this->mysqlDatabase))->create([
             'total_price' => $total_price,
             'address' => $_POST['address'],
             'status' => 'pending'
         ]);
-        $order = (new Order)->where('id', $orderId)->get()[0];
-        $order->setProducts($products);
+        (new OrderRepository($this->mysqlDatabase))->setProducts($orderId, $products);
         Redirect::to('/payment/pay/'.$orderId);
     }
 

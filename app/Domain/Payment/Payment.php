@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Domain\Payment;
 
-class Payment extends Model
+class Payment
 {
     public $id;
     public $order_id;
@@ -12,5 +12,5 @@ class Payment extends Model
     public $status;
     public $track_id;
 
-    protected $cols = ['id', 'order_id', 'idpay_id', 'link', 'amount', 'status', 'track_id'];
+    public $cols = ['id', 'order_id', 'idpay_id', 'link', 'amount', 'status', 'track_id'];
 }

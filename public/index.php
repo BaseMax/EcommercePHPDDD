@@ -5,14 +5,14 @@ if(!isset($_SESSION['cart'])){
     $_SESSION['cart'] = [];
 }
 
-use App\Controllers\AppController;
-use App\Controllers\ProductController;
-use App\Controllers\CartController;
-use App\Controllers\CheckoutController;
-use App\Controllers\PaymentController;
+use App\Presentation\Http\Controllers\AppController;
+use App\Presentation\Http\Controllers\ProductController;
+use App\Presentation\Http\Controllers\CartController;
+use App\Presentation\Http\Controllers\CheckoutController;
+use App\Presentation\Http\Controllers\PaymentController;
 use Dotenv\Dotenv;
-use App\Router\Router;
-use App\Response\Abort;
+use App\Presentation\Http\Router\Router;
+use App\Presentation\Http\Response\Abort;
 
 require_once '../vendor/autoload.php';
 

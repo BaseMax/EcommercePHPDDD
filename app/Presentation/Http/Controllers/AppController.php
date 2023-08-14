@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Presentation\Http\Controllers;
 
-use App\Router\Redirect;
+use App\Presentation\Http\Router\Redirect;
 
 class AppController extends Controller
 {

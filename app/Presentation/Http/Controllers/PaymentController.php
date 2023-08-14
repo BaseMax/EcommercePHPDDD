@@ -1,20 +1,18 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Presentation\Http\Controllers;
 
-use App\Models\Order;
-use App\Models\Payment;
-use App\Response\Response;
-use App\Router\Redirect;
+use App\Domain\Order\OrderRepository;
+use App\Presentation\Http\Router\Redirect;
+use App\Domain\Payment\PaymentRepository;
 
 class PaymentController extends Controller
 {
     public function pay($orderId){
-        $order = (new Order())->where('id', $orderId)->get();
-        if(count($order) == 0){
+        $order = (new OrderRepository($this->mysqlDatabase))->where('id', $orderId)->first();
+        if($order == null){
             return $this->cleanUpOnError(null, null);
         }
-        $order = $order[0];
         $params = array(
             'order_id' => $order->id,
             'amount' => $order->total_price,
@@ -46,7 +44,7 @@ class PaymentController extends Controller
           curl_close($ch);
           
           $resultArray = (array) json_decode($result);
-          (new Payment())->create([
+          (new PaymentRepository($this->mysqlDatabase))->create([
             'order_id' => $orderId,
             'idpay_id' => $resultArray['id'],
             'link' => $resultArray['link'],
@@ -58,18 +56,16 @@ class PaymentController extends Controller
     }
 
     public function callback(){
-        $order = (new Order())->where('id', intval($_POST['order_id']))->get();
-        if(count($order) == 0){
+        $order = (new OrderRepository($this->mysqlDatabase))->where('id', intval($_POST['order_id']))->first();
+        if($order == null){
             return $this->cleanUpOnError(null, $order);
         }
-        $order = $order[0];
-
-        $payment = (new Payment())->where('idpay_id', $_POST['id'])->get();
-        if(count($payment) == 0){
+        
+        $payment = (new PaymentRepository($this->mysqlDatabase))->where('idpay_id', $_POST['id'])->first();
+        if($payment == null){
             return $this->cleanUpOnError($payment, $order);
         }
-        $payment = $payment[0];
-
+        
         $payment->track_id = intval($_POST['track_id']);
         if(intval($_POST['status']) != 10){
             return $this->cleanUpOnError($payment, $order);
@@ -106,10 +102,10 @@ class PaymentController extends Controller
 
         if(intval($resultArray['track_id']) == $payment->track_id && $resultArray['id'] == $payment->idpay_id){
             $payment->status = $resultArray['status'];
-            $payment->update();
+            (new PaymentRepository($this->mysqlDatabase))->update($payment);
             if($resultArray['status'] == 100){
                 $order->status = "done";
-                $order->update();
+                (new OrderRepository($this->mysqlDatabase))->update($order);
                 return $this->success();
             }
         } else {

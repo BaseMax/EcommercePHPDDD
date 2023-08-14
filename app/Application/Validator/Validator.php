@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Validator;
+namespace App\Application\Validator;
 
 use Exception;
 
@@ -10,7 +10,7 @@ class Validator
         foreach($rules as $key => $rule){
             foreach($rule as $item){
                 $validatorsInfo = explode(':', $item);
-                $validator = 'App\\Validator\\'.ucfirst($validatorsInfo[0]).'Validator';
+                $validator = 'App\\Application\\Validator\\'.ucfirst($validatorsInfo[0]).'Validator';
                 $vObject = new $validator;
                 $args = [$key, $data];
                 if(count($validatorsInfo) > 1){
