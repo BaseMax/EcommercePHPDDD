@@ -38,7 +38,7 @@ The architecture of the DDD PHP 8.2 Ecommerce System follows a layered approach,
 - Install dependencies: `composer install`
 - Setup mysql database tables: you can either use sql code below or use sql backup `database.sql`
 - Edit `.env` file with your own values
-- (optionaly) Seed the database: `cd app/Database/ && php Seeder.php`
+- (optionaly) Seed the database: `cd app/Infrastructure/Database/ && php MysqlSeeder.php`
 - Run the server: `cd public/ && php -S localhost:8000`
 - App is running on `http://localhost:8000`
 
