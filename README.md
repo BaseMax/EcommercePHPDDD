@@ -1,6 +1,6 @@
 # Domain-Driven Design (DDD) PHP 8.2 Ecommerce System
 
-Welcome to the Domain-Driven Design (DDD) PHP 8.2 Ecommerce System! This project aims to provide a robust and scalable Restful API-based ecommerce system using PHP 8.2, all without relying on Laravel or any other third-party project. This README will guide you through the setup, architecture, and usage of the system.
+Welcome to the Domain-Driven Design (DDD) PHP 8.2 Ecommerce System! This project aims to provide a robust and scalable ecommerce system using PHP 8.2, all without relying on Laravel or any other third-party project. This README will guide you through the setup, architecture, and usage of the system.
 
 ## Introduction
 
@@ -9,7 +9,6 @@ The DDD PHP 8.2 Ecommerce System is designed with a focus on Domain-Driven Desig
 ## Features
 
 - Domain-Driven Design: The system adheres to DDD principles, helping you create a clear and structured architecture for your ecommerce application.
-- Restful API: The API is designed to be RESTful, enabling easy integration with various client applications.
 - PHP 8.2: Utilize the latest features and enhancements provided by PHP 8.2 for improved performance and maintainability.
 - Modular Design: The architecture promotes modularization, making it easier to add, update, or replace specific components of the system.
 - Custom ORM: Implement a simple Object-Relational Mapping (ORM) tailored to the needs of the ecommerce domain.
@@ -18,7 +17,7 @@ The DDD PHP 8.2 Ecommerce System is designed with a focus on Domain-Driven Desig
 
 The architecture of the DDD PHP 8.2 Ecommerce System follows a layered approach, separating concerns and promoting a clear division of responsibilities. The main layers are:
 
-- **Presentation Layer:** Handles user interaction, including handling HTTP requests and responses. It exposes the Restful API endpoints.
+- **Presentation Layer:** Handles user interaction, including handling HTTP requests and responses.
 - **Application Layer:** Orchestrates the interaction between the Presentation and Domain layers. Contains application services and use cases.
 - **Domain Layer:** Contains the core business logic and domain entities. This layer is the heart of the application and should be independent of other layers.
 - **Infrastructure Layer:** Provides implementations for external dependencies such as databases, HTTP clients, and third-party integrations.
@@ -28,29 +27,6 @@ The architecture of the DDD PHP 8.2 Ecommerce System follows a layered approach,
 ![screenshot1](/screenshots/screenshot%20(1).png)
 ![screenshot2](/screenshots/screenshot%20(2).png)
 ![screenshot3](/screenshots/screenshot%20(3).png)
-
-## Routes
-
-### Product
-
-- `GET /products`: Show all products.
-- `GET /product/{id}`: Show the product with specified id.
-
-### Cart
-
-- `GET /cart`: Return all products in users cart.
-- `POST /cart/add`: Add a product to users cart.
-
-### Checkout
-
-- `GET /checkout/review`: Show user cart and get user address for placing order.
-- `POST /checkout`: Place a new order and bill user.
-- `GET /checkout/result/{status}`: Show order acceptance status.
-
-### Payment
-
-- `GET /payment/pay/{orderId}`: Pay the bill.
-- `POST /payment/callback`: Verify bill payment.
 
 ## Getting Started
 
@@ -121,10 +97,6 @@ CREATE TABLE IF NOT EXISTS payments (
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 );
 ```
-
-## API Documentation
-
-For detailed API documentation, refer to the API Documentation file. It provides information about available endpoints, request/response formats, and example usage.
 
 ## Contributing
 
