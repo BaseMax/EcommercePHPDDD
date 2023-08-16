@@ -5,7 +5,7 @@ namespace App\Infrastructure\PaymentMethod;
 use Exception;
 use App\Domain\Order\Order;
 
-class IdpayPaymentMethod
+class IdpayPaymentMethod implements IPaymentMethod
 {
     private Order $order;
 
