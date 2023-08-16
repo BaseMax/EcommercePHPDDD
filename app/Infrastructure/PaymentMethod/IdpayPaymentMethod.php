@@ -3,17 +3,18 @@
 namespace App\Infrastructure\PaymentMethod;
 
 use Exception;
+use App\Domain\Order\Order;
 
 class IdpayPaymentMethod
 {
-    private $order;
+    private Order $order;
 
-    public function __construct($order)
+    public function __construct(Order $order)
     {
         $this->order = $order;
     }
 
-    public function paymentRequest(){
+    public function paymentRequest() : string{
         $params = [
             'order_id' => $this->order->id,
             'amount' => $this->order->total_price,
@@ -22,7 +23,7 @@ class IdpayPaymentMethod
         return $this->request($params, $_ENV['ID_PAY_PAYMENT_LINK']);
     }
 
-    public function paymentVerifyRequest($id, $order_id){
+    public function paymentVerifyRequest(string $id, int $order_id) : string{
         $params = array(
             'id' => $id,
             'order_id' => $order_id,
@@ -30,7 +31,7 @@ class IdpayPaymentMethod
         return $this->request($params, $_ENV['ID_PAY_PAYMENT_VERIFY']);
     }
 
-    public function request($params, $link){
+    public function request(array $params, string $link) : string{
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $link);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));

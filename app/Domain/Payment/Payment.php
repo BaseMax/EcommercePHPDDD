@@ -2,15 +2,21 @@
 
 namespace App\Domain\Payment;
 
-class Payment
-{
-    public $id;
-    public $order_id;
-    public $idpay_id;
-    public $link;
-    public $amount;
-    public $status;
-    public $track_id;
+use App\Domain\IModel;
 
-    public $cols = ['id', 'order_id', 'idpay_id', 'link', 'amount', 'status', 'track_id'];
+class Payment implements IModel
+{
+    public int $id;
+    public int $order_id;
+    public string $idpay_id;
+    public string $link;
+    public int $amount;
+    public int $status;
+    public int $track_id;
+
+    public array $cols = ['id', 'order_id', 'idpay_id', 'link', 'amount', 'status', 'track_id'];
+
+    public function getCols() : array {
+        return $this->cols;
+    }
 }

@@ -3,6 +3,8 @@
 namespace App\Infrastructure\Database;
 
 use App\Presentation\Http\Response\Response;
+use App\Domain\IModel;
+use App\Domain\Repository;
 use PDO;
 
 class MysqlDatabase implements IDatabase
@@ -32,7 +34,7 @@ class MysqlDatabase implements IDatabase
         $this->statement->execute($params);
     }
 
-    public function create($vals){
+    public function create(array $vals) : int{
         $tableName = $this->getTableName();
         $cols = $this->repository->cols;
         $sql = "INSERT INTO ".$tableName."(";
@@ -56,7 +58,7 @@ class MysqlDatabase implements IDatabase
         return $this->connection->lastInsertId();
     }
 
-    public function get(){
+    public function get() : array{
         $this->sql = "SELECT * FROM ".$this->getTableName().$this->sql;
         try{
             $this->execute($this->sql);
@@ -78,7 +80,7 @@ class MysqlDatabase implements IDatabase
         return $objects;
     }
 
-    public function first(){
+    public function first() : IModel{
         $objects = $this->get();
         if(count($objects) > 0){
             return $objects[0];
@@ -86,7 +88,7 @@ class MysqlDatabase implements IDatabase
         return null;
     }
 
-    public function count(){
+    public function count() : int{
         $this->sql = "SELECT COUNT(*) FROM ".$this->getTableName().$this->sql;
         $this->execute($this->sql);
         $result = $this->statement->fetch();
@@ -94,7 +96,7 @@ class MysqlDatabase implements IDatabase
         return $result['COUNT(*)'];
     }
 
-    public function update($modelObject){
+    public function update(IModel $modelObject) : void{
         $this->repository->modelClass = $modelObject;
         $cols = $this->repository->cols;
         $sql = "UPDATE ".$this->getTableName()." SET ";
@@ -112,13 +114,13 @@ class MysqlDatabase implements IDatabase
         $this->execute($sql);
     }
 
-    public function delete($objectId){
+    public function delete(int $objectId) : void{
         $id = 'id';
         $sql = "DELETE FROM ".$this->getTableName()." WHERE id = ".$objectId;
         $this->execute($sql);
     }
 
-    public function where($col, $val){
+    public function where(string $col, mixed $val) : Repository{
         if(is_string($val)){
             $this->sql .= " WHERE $col = '$val'";
         } else {
@@ -136,8 +138,8 @@ class MysqlDatabase implements IDatabase
         return $this->getCustomTableName($this->repository->modelClass);
     }
 
-    public function whereIn($col, $vals){
-        if(count($vals) == 0) return;
+    public function whereIn(string $col, array $vals) : Repository{
+        if(count($vals) == 0) return $this->repository;
         $this->sql .= " WHERE $col IN (";
         if(is_string($vals[0])){
             foreach($vals as $val){
@@ -158,18 +160,18 @@ class MysqlDatabase implements IDatabase
         $this->repository->modelClass = $this->where('id', $modelId)->first();
     }
 
-    public function getHasMany($modelId, $modelRepository, $key){
+    public function getHasMany(int $modelId, string $modelRepository, string $key) : array{
         $this->setModelObjectBeforeForigenActions($modelId);
         $id = 'id';
         return (new $modelRepository('App\Infrastructure\Database\MysqlDatabase'))->where($key, $this->repository->modelClass->$id)->get();
     }
 
-    public function getBelogsTo($modelId, $modelRepository, $key){
+    public function getBelogsTo(int $modelId, string $modelRepository, string $key) : IModel{
         $this->setModelObjectBeforeForigenActions($modelId);
         return (new $modelRepository('App\Infrastructure\Database\MysqlDatabase'))->where('id', $this->repository->modelClass->$key)->first();
     }
 
-    public function getBelogsToMany($modelId, $modelRepository, $table, $mKey, $rKey, $pivot = []){
+    public function getBelogsToMany(int $modelId, string $modelRepository, string $table, string $mKey, string $rKey, array $pivot = []) : array{
         $this->setModelObjectBeforeForigenActions($modelId);
         $id = 'id';
         $rTable = $this->getCustomTableName((new $modelRepository('App\Infrastructure\Database\MysqlDatabase'))->modelClass);
@@ -197,7 +199,7 @@ class MysqlDatabase implements IDatabase
         return $rObjects;
     }
 
-    public function setBelogsToMany($modelId, $data, $modelRepository, $table, $mKey, $rKey, $pivot = []){
+    public function setBelogsToMany(int $modelId, array $data, string $modelRepository, string $table, string $mKey, string $rKey, array $pivot = []) : void{
         $this->setModelObjectBeforeForigenActions($modelId);
         $id = 'id';
         $sql = "INSERT INTO $table($mKey, $rKey,";

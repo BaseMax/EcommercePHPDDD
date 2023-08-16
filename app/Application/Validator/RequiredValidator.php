@@ -4,7 +4,7 @@ namespace App\Application\Validator;
 
 class RequiredValidator implements IsValidator
 {
-    public function validate($key, $data, $extera = null){
+    public function validate(string $key, array $data, string $extera = null) : bool|string {
         if($data && array_key_exists($key, $data)){
             return true;
         }

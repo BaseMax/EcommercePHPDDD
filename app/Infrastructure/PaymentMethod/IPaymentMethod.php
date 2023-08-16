@@ -4,6 +4,6 @@ namespace App\Infrastructure\PaymentMethod;
 
 interface IPaymentMethod
 {
-    public function paymentRequest();
-    public function paymentVerifyRequest($id, $order_id);
+    public function paymentRequest() : string;
+    public function paymentVerifyRequest(string $id, int $order_id) : string;
 }

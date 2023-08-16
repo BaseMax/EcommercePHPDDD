@@ -2,11 +2,17 @@
 
 namespace App\Domain\Product;
 
-class Product
-{
-    public $id;
-    public $name;
-    public $price;
+use App\Domain\IModel;
 
-    public $cols = ['id', 'name', 'price'];
+class Product implements IModel
+{
+    public int $id;
+    public string $name;
+    public int $price;
+
+    private array $cols = ['id', 'name', 'price'];
+
+    public function getCols() : array {
+        return $this->cols;
+    }
 }
